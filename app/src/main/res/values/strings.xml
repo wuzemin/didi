@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">Taxi</string>
+
+    <string name="city">广州</string>
+    <string name="car">打车</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="exit">退出</string>
+    <string name="user">用户名</string>
+    <string name="pwd">密码</string>
+    <string name="password">密码：</string>
+    <string name="password_setting">密码设置</string>
+    <string name="repassword">确认密码：</string>
+    <string name="getcode">获取验证码</string>
+    <string name="phone">电话号码</string>
+    <string name="taxi">出租车</string>
+    <string name="special">专车</string>
+    <string name="carpool">拼车</string>
+    <string name="personal">我的</string>
+    <string name="end">终点</string>
+    <string name="search">搜索</string>
+    <string name="end_title">标题</string>
+    <string name="distance">距离</string>
+    <string name="addr">地址</string>
+    <string name="route">路线</string>
+    <string name="no_result">对不起，没有搜索到相关数据！</string>
+    <string name="navi">导航</string>
+    <string name="search_peripheral">搜索周边</string>
+
+    <string name="comment">评论</string>
+    <string name="comment_user">用户</string>
+    <string name="comment_time">评论时间</string>
+    <string name="comment_content">评论内容</string>
+
+    <string name="time">时间</string>
+    <string name="carpool_text">拼车讨论</string>
+
+    <string name="app_id">输入您讯飞的appid</string>
+    <string name="preference_default_tts_role">xiaoyan</string>
+    <string name="preference_key_tts_speed">tts_speed</string>
+    <string name="preference_title_tts_speed">语速</string>
+    <string name="preference_default_tts_speed">50</string>
+    <string name="preference_dialog_title_tts_speed">选择语速</string>
+    <string name="preference_key_tts_volume">tts_volume</string>
+    <string name="preference_title_tts_volume">音量</string>
+    <string name="preference_default_tts_volume">50</string>
+    <string name="preference_dialog_title_tts_volume">选择音量</string>
+    <string name="preference_key_tts_pitch">tts_pitch</string>
+    <string name="preference_title_tts_pitch">语调</string>
+    <string name="preference_default_tts_pitch">50</string>
+    <string name="intell_bd_title">智能播报</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_user">账号</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录或注册</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="error_invalid_email">此电子邮件地址无效</string>
+    <string name="error_invalid_password">密码长度不能少于5</string>
+    <string name="error_incorrect_password">密码错误</string>
+    <string name="error_field_required">必填</string>
+    <string name="permission_rationale">"联系人权限提供电子邮件完成的需要"</string>
+    <string name="test">测试</string>
+    <string name="share_position">位置共享</string>
+    <string name="call_car">一键叫车</string>
+</resources>

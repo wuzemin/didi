@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ike.taxi.activity.EndActivity">
+    <!--终点设置-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/iv_left_arrow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@mipmap/nav_btn_back_light_normal"/>
+        <TextView
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+        <!--<EditText
+            android:layout_marginLeft="10dp"
+            android:id="@+id/et_end"
+            android:background="@color/grey"
+            android:layout_width="250dp"
+            android:layout_height="40dp" />-->
+        <AutoCompleteTextView
+            android:imeOptions="actionSearch"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="40dp"
+            android:id="@+id/et_end"
+            android:layout_marginLeft="15dp"
+            android:background="@color/grey"/>
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_search"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="@string/search"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text2"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ll_end"></ListView>
+    <!--<com.amap.api.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map_search">
+    </com.amap.api.maps.MapView>-->
+
+</LinearLayout>
