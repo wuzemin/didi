@@ -14,7 +14,7 @@ import okhttp3.OkHttpClient;
  * Created by Min on 2016/9/10.
  */
 public class HttpUtils {
-    private static final String baseUrl="http://192.168.1.113:8888";
+    private static final String baseUrl="http://192.168.1.123:8080";
 
     /**
      * 设置cookie

@@ -7,20 +7,20 @@ import java.io.Serializable;
  */
 
 public class LoginEntity implements Serializable{
-    private String errno;
+    private String code;
     private String msg;
 
-    public LoginEntity(String errno, String msg) {
-        this.errno = errno;
+    public LoginEntity(String code, String msg) {
+        this.code = code;
         this.msg = msg;
     }
 
-    public String getErrno() {
-        return errno;
+    public String getCode() {
+        return code;
     }
 
-    public void setErrno(String errno) {
-        this.errno = errno;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getMsg() {

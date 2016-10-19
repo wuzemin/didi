@@ -1,9 +1,7 @@
 package com.ike.taxi;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
 import android.widget.RadioGroup;
 
 import com.ike.taxi.fragment.FirstFragment;
@@ -18,8 +16,6 @@ public class MainActivity extends AppCompatActivity{
     private FirstFragment firstFragment;
     private SecondFragment secondFragment;
     private PersonalFragment thirdFragment;
-    private Button btn_comment;
-    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ike.taxi.R;
 import com.ike.taxi.activity.EndActivity;
+import com.ike.taxi.chat.activity.TestLoginActivity;
 import com.ike.taxi.entity.LocationEntity;
 import com.ike.taxi.entity.Nearby;
 import com.ike.taxi.listener.OnLocationGetListener;
@@ -62,8 +63,9 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
     private EditText et_start;
     private EditText et_end;
     private EditText et_number;
-    private Button btn_call;
-    private Button btn_call_car;
+    private Button btn_route; //线路
+    private Button btn_call_car;  //一键叫车
+    private Button btn_chat;
 
     private Button btn_share_position;
     private final int REQUEST_CODE=1;
@@ -152,16 +154,18 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
         et_start= (EditText) view.findViewById(R.id.et_start);
         et_end= (EditText) view.findViewById(R.id.et_end);
         et_number= (EditText) view.findViewById(R.id.et_number);
-        btn_call= (Button) view.findViewById(R.id.btn_call);
+        btn_route= (Button) view.findViewById(R.id.btn_route);
         btn_navi= (Button) view.findViewById(R.id.btn_navi);
         btn_share_position= (Button) view.findViewById(R.id.btn_share_position);
         btn_call_car= (Button) view.findViewById(R.id.btn_call_car);
+        btn_chat= (Button) view.findViewById(R.id.btn_chat);
 
         et_end.setOnTouchListener(this);
-        btn_call.setOnClickListener(this);
+        btn_route.setOnClickListener(this);
         btn_navi.setOnClickListener(this);
         btn_share_position.setOnClickListener(this);
         btn_call_car.setOnClickListener(this);
+        btn_chat.setOnClickListener(this);
 
 
         mBottomLayout= (RelativeLayout) view.findViewById(R.id.bottom_layout);
@@ -172,7 +176,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_call:  //线路
+            case R.id.btn_route:  //线路
                 Log.v("---------------=-=","btn_call！");
                 DriveRoute.getInstance(getActivity(),aMap).search(mStartPoint,mEndPoint);
                 //驾车路径
@@ -188,9 +192,13 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
                 initShare();
                 Log.e("--------====",mStartPoint+"");
                 break;
-            case R.id.btn_call_car:  //叫车
+            case R.id.btn_call_car:  //一键叫车
                 Log.e("--------===",btn_call_car+"");
                 call_car();
+                break;
+            case R.id.btn_chat:
+                Intent intent1=new Intent(getActivity(), TestLoginActivity.class);
+                startActivity(intent1);
                 break;
             default:
                 break;
@@ -258,7 +266,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
         });
     }
 
-    //点击edittext事件获取终点位置
+    //点击edittext事件选取终点位置
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(event.getAction()==MotionEvent.ACTION_DOWN) {
@@ -408,6 +416,51 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
     }
 
 
+
+
+    private void OrbitHttpUtils(){
+        String url="/orbit";
+        HttpUtils.getRequest(url, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Toast.makeText(getActivity(), "数据获取失败--orbit，请检查网络是否完好或服务器是否开启",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Gson gson=new Gson();
+                Type type=new TypeToken<List<Nearby>>(){}.getType();
+                orbit=gson.fromJson(response,type);
+                initOrbit();
+            }
+        });
+    }
+
+
+    //显示轨迹
+    private void initOrbit() {
+        for(int i=0;i<orbit.size();i++){
+            double latitude=orbit.get(i).getLatitude();
+            double longitude=orbit.get(i).getLongitude();
+            LatLng latlng=new LatLng(latitude,longitude);
+            list.add(latlng);
+            Log.d("-----------",list+"");
+        }
+        mapView.getMap().setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
+            @Override
+            public void onMapLoaded() {
+                mapView.getMap().addPolygon(new PolygonOptions().addAll(list));
+            }
+        });
+        aMap.setOnMapLoadedListener(this);
+
+    }
+    @Override
+    public void onMapLoaded() {
+        aMap.addPolygon(new PolygonOptions().addAll(list));
+    }
+
     /**
      * 显示进度框
      */
@@ -459,49 +512,6 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
-    }
-
-    private void OrbitHttpUtils(){
-        String url="/orbit";
-        HttpUtils.getRequest(url, new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                Toast.makeText(getActivity(), "数据获取失败--orbit，请检查网络是否完好或服务器是否开启",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                Gson gson=new Gson();
-                Type type=new TypeToken<List<Nearby>>(){}.getType();
-                orbit=gson.fromJson(response,type);
-                initOrbit();
-            }
-        });
-    }
-
-
-    //显示轨迹
-    private void initOrbit() {
-        for(int i=0;i<orbit.size();i++){
-            double latitude=orbit.get(i).getLatitude();
-            double longitude=orbit.get(i).getLongitude();
-            LatLng latlng=new LatLng(latitude,longitude);
-            list.add(latlng);
-            Log.d("-----------",list+"");
-        }
-        mapView.getMap().setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
-            @Override
-            public void onMapLoaded() {
-                mapView.getMap().addPolygon(new PolygonOptions().addAll(list));
-            }
-        });
-        aMap.setOnMapLoadedListener(this);
-
-    }
-    @Override
-    public void onMapLoaded() {
-        aMap.addPolygon(new PolygonOptions().addAll(list));
     }
 
     //            //显示轨迹

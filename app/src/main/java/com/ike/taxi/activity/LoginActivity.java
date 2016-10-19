@@ -3,6 +3,7 @@ package com.ike.taxi.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
@@ -94,56 +95,46 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             case R.id.sign_in_button:
                 user=tv_user.getText().toString().trim();
                 pwd=tv_pwd.getText().toString().trim();
-                if("".equals(user) || "".equals(pwd)) {
-                    Toast.makeText(LoginActivity.this,"用户名和密码不能为空",Toast.LENGTH_SHORT).show();
-                }else if(user!=null && pwd!=null) {
-                    String url="/login";
-//                    HttpUtils.sendGetRequest(url+"?name="+user+"&pwd="+pwd, user, pwd, new StringCallback() {
-                    HttpUtils.sendPostRequest(url, user, pwd, new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
-                            Toast.makeText(LoginActivity.this, "连接错误", Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
-                        public void onResponse(String response, int id) {
-                            HttpUtils.setCookie(LoginActivity.this);
-                            /*try {
-                                *//*JSONArray jsonArray=new JSONArray(response);
-                                for(int i=0;i<jsonArray.length();i++){
-                                    JSONObject jsonObject=jsonArray.getJSONObject(i);
-                                    String result=jsonObject.getString("errno");
-                                    if("0".equals(result)){
-                                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }*//*
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }*/
-                            Gson gson=new Gson();
-                            Type type=new TypeToken<LoginEntity>(){}.getType();
-//                            String sss=gson.fromJson(response,type);
-                            LoginEntity loginEntity=gson.fromJson(response,type);
-                            String sss=loginEntity.getErrno();
-//                            Log.e("----------=",sss);
-                            if("0".equals(sss)){
-                                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }else {
-                                Toast.makeText(LoginActivity.this, "登录失败,用户名或密码错误！", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }else {
-                    Toast.makeText(LoginActivity.this,"登录失败",Toast.LENGTH_SHORT).show();
-                }
+                login(user,pwd);
                 break;
             default:
                 break;
         }
     }
+
+    private void login(String user, String pwd) {
+        if("".equals(user) || "".equals(pwd)) {
+            Toast.makeText(LoginActivity.this,"用户名和密码不能为空",Toast.LENGTH_SHORT).show();
+        }else if(user!=null && pwd!=null) {
+            String url="/login";
+            Log.e("==========",url+"?username="+user+"&password="+pwd);
+            HttpUtils.sendGetRequest(url, user, pwd, new StringCallback() {
+                //                    HttpUtils.sendPostRequest(url, user, pwd, new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    Toast.makeText(LoginActivity.this, "连接错误", Toast.LENGTH_SHORT).show();
+                }
+                @Override
+                public void onResponse(String response, int id) {
+                    HttpUtils.setCookie(LoginActivity.this);
+                    Gson gson=new Gson();
+                    Type type=new TypeToken<LoginEntity>(){}.getType();
+                    LoginEntity loginEntity=gson.fromJson(response,type);
+                    String code=loginEntity.getCode();
+//                            Log.e("----------=",code+"");
+                    if("200".equals(code)){
+                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else {
+                        Toast.makeText(LoginActivity.this, "登录失败,用户名或密码错误！", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }else {
+            Toast.makeText(LoginActivity.this,"登录失败",Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //存数据
     private void saveData() {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo",MODE_PRIVATE);
@@ -165,7 +156,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         tv_user.setText(sharedPreferences.getString("user",""));
         tv_pwd.setText(sharedPreferences.getString("pwd",""));
     }
-
 
     // 提交用户信息
     public void submitUserInfo(String country,String phone){

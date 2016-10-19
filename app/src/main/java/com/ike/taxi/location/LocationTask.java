@@ -2,7 +2,6 @@ package com.ike.taxi.location;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -62,8 +61,8 @@ public class LocationTask implements AMapLocationListener,OnLocationGetListener,
 
 //                Toast.makeText(getActivity(),startLatitude+","+startLongitude,Toast.LENGTH_SHORT).show();
             }else {
-                Toast.makeText(context,"定位失败："+aMapLocation.getErrorCode(),
-                        Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(context,"定位失败："+aMapLocation.getErrorCode(),
+                        Toast.LENGTH_SHORT).show();*/
             }
         }
     }

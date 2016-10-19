@@ -66,4 +66,14 @@
     <string name="test">测试</string>
     <string name="share_position">位置共享</string>
     <string name="call_car">一键叫车</string>
+
+    <!--Chat-->
+    <string name="chat">聊天</string>
+    <string name="info">消息</string>
+    <string name="friend">好友</string>
+    <string name="dynamic">动态</string>
+    <string name="no_friend">暂无好友</string>
+    <string name="new_friend">新朋友</string>
+    <string name="group">群组</string>
+    <string name="public_service">公众号</string>
 </resources>

@@ -43,10 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey"/>
 
     <RadioGroup
         android:id="@+id/tab_menu"
@@ -91,6 +87,11 @@
             android:gravity="center"
             android:button="@null"/>
     </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
 
 </LinearLayout>
 
