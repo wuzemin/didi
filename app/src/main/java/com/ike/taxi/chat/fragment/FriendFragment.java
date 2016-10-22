@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,8 +72,8 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
     private View view;
 
     public FriendFragment() {
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -297,8 +298,9 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.re_chatroom:
                 /*startActivity(new Intent(getActivity(), GroupListActivity.class));*/
-                if (RongIM.getInstance() != null)
+                if (RongIM.getInstance() != null) {
                     RongIM.getInstance().startSubConversationList(getActivity(), Conversation.ConversationType.GROUP);
+                }
 //                ToastUtil.show(getActivity(),"GroupListActivity.class");
                 break;
             case R.id.publicservice:
@@ -352,6 +354,8 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.e("11111111111---onDestroy","FirstFragment");
+
         /*BroadcastManager.getInstance(getActivity()).destroy(SealAppContext.UPDATE_FRIEND);
         BroadcastManager.getInstance(getActivity()).destroy(SealAppContext.UPDATE_RED_DOT);
         BroadcastManager.getInstance(getActivity()).destroy(SealConst.CHANGEINFO);*/

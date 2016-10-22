@@ -8,6 +8,12 @@
     tools:context="com.ike.taxi.chat.activity.ConversationListActivity">
 
     <include layout="@layout/actionbar" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="刘备"
+        android:id="@+id/btn_lb"/>
+
     <fragment
         android:id="@+id/conversationlist"
         android:name="io.rong.imkit.fragment.ConversationListFragment"

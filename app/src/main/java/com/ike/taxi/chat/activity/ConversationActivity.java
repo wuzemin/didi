@@ -60,7 +60,6 @@ public class ConversationActivity extends FragmentActivity implements RongIM.Use
         list.add(new ConversationUser("ike","张三","http://www.qq1234.org/uploads/allimg/150323/1H5024459-11.jpg"));
         RongIM.setUserInfoProvider(this,true);
 
-
         setActionBar();
 
         getIntentDate(intent);

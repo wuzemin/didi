@@ -13,19 +13,26 @@ import com.amap.api.navi.model.AimLessModeCongestionInfo;
 import com.amap.api.navi.model.AimLessModeStat;
 import com.amap.api.navi.model.NaviInfo;
 import com.autonavi.tbt.TrafficFacilityInfo;
-import com.iflytek.cloud.speech.SpeechConstant;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechListener;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
+import com.ike.taxi.R;
+
+/*import com.iflytek.cloud.speech.SpeechConstant;
 import com.iflytek.cloud.speech.SpeechError;
 import com.iflytek.cloud.speech.SpeechListener;
 import com.iflytek.cloud.speech.SpeechSynthesizer;
 import com.iflytek.cloud.speech.SpeechUser;
-import com.iflytek.cloud.speech.SynthesizerListener;
-import com.ike.taxi.R;
+import com.iflytek.cloud.speech.SynthesizerListener;*/
 
 /**
  * 语音播报组件
  */
 public class TTSController implements SynthesizerListener, AMapNaviListener {
-
+//public class TTSController implements SynthesizerListener,AMapNaviListener{
     public static TTSController ttsManager;
     boolean isfinish = true;
     private Context mContext;
@@ -35,19 +42,20 @@ public class TTSController implements SynthesizerListener, AMapNaviListener {
     }
 
     // 合成对象.
+//    private SpeechSynthesizer mSpeechSynthesizer;
     private SpeechSynthesizer mSpeechSynthesizer;
     /**
      * 用户登录回调监听器.
      */
-    private SpeechListener listener = new SpeechListener() {
-
-
+//    private SpeechListener listener = new SpeechListener() {
+    private SpeechListener listener=new SpeechListener() {
         @Override
-        public void onEvent(int arg0, Bundle arg1) {
+        public void onEvent(int i, Bundle bundle) {
+
         }
 
         @Override
-        public void onData(byte[] bytes) {
+        public void onBufferReceived(byte[] bytes) {
 
         }
 
@@ -69,10 +77,10 @@ public class TTSController implements SynthesizerListener, AMapNaviListener {
     }
 
     public void init() {
-        SpeechUser.getUser().login(mContext, null, null,
-                "appid=" + mContext.getString(R.string.app_id), listener);
+//        SpeechUser.getUser().login(mContext, null, null,
+//                "appid=" + mContext.getString(R.string.app_id), listener);
         // 初始化合成对象.
-        mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(mContext);
+        mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(mContext,initListener);
         initSpeechSynthesizer();
     }
 
@@ -87,13 +95,21 @@ public class TTSController implements SynthesizerListener, AMapNaviListener {
         }
         if (null == mSpeechSynthesizer) {
             // 创建合成对象.
-            mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(mContext);
+//            mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(mContext);
+            mSpeechSynthesizer=SpeechSynthesizer.createSynthesizer(mContext, initListener);
             initSpeechSynthesizer();
         }
         // 进行语音合成.
         mSpeechSynthesizer.startSpeaking(playText, this);
 
     }
+
+    private InitListener initListener=new InitListener() {
+        @Override
+        public void onInit(int i) {
+
+        }
+    };
 
     public void stopSpeaking() {
         if (mSpeechSynthesizer != null)
@@ -133,6 +149,11 @@ public class TTSController implements SynthesizerListener, AMapNaviListener {
     }
 
     @Override
+    public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+    }
+
+    @Override
     public void onSpeakBegin() {
 
         isfinish = false;
@@ -150,6 +171,7 @@ public class TTSController implements SynthesizerListener, AMapNaviListener {
 
 
     }
+
 
     @Override
     public void onSpeakResumed() {

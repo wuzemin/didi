@@ -76,4 +76,7 @@
     <string name="new_friend">新朋友</string>
     <string name="group">群组</string>
     <string name="public_service">公众号</string>
+    <string name="add_contacts">添加好友</string>
+    <string name="fetching">获取中……</string>
+    <string name="xfyun">发送语音</string>
 </resources>

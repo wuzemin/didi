@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.ike.taxi.R;
 import com.ike.taxi.activity.CrashHandler;
+import com.ike.taxi.chat.AppContext;
 import com.ike.taxi.chat.DemoContext;
 
 import io.rong.imageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -42,10 +43,12 @@ public class App extends android.app.Application {
              * IMKit SDK调用第一步 初始化
              */
             RongIM.init(this);
-
+            //自定义功能
+            AppContext.init(this);
             if (getApplicationInfo().packageName.equals(getCurProcessName(getApplicationContext()))) {
                 DemoContext.init(this);
             }
+
         }
         options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.mipmap.taxi)

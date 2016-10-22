@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.ike.taxi.R;
 import com.ike.taxi.activity.LoginActivity;
+import com.ike.taxi.base.BaseActivity;
 import com.ike.taxi.chat.adapter.ConversationListAdapterEx;
 import com.ike.taxi.chat.fragment.DynamicFragment;
 import com.ike.taxi.chat.fragment.FriendFragment;
@@ -33,7 +34,7 @@ import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
-public class ChatActivity extends FragmentActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class ChatActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private ViewPager mViewPager;
     private List<Fragment> mFragment = new ArrayList<>();
@@ -101,9 +102,9 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
             }
         };
         mViewPager.setAdapter(fragmentPagerAdapter);
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setOnPageChangeListener(this);
-        initData();
+//        initData();
     }
 
     protected void initData() {
@@ -197,7 +198,6 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
                         RongIM.connect(cacheToken, new RongIMClient.ConnectCallback() {
                             @Override
                             public void onTokenIncorrect() {
-
                             }
 
                             @Override
@@ -295,9 +295,9 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void changeTextViewColor() {
-        mImageChats.setBackgroundDrawable(getResources().getDrawable(R.mipmap.info_normal));
-        mImageContact.setBackgroundDrawable(getResources().getDrawable(R.mipmap.affairs_normal));
-        mImageFind.setBackgroundDrawable(getResources().getDrawable(R.mipmap.personal_normal));
+        mImageChats.setBackground(ContextCompat.getDrawable(this,R.mipmap.info_normal));
+        mImageContact.setBackground(ContextCompat.getDrawable(this,R.mipmap.affairs_normal));
+        mImageFind.setBackground(ContextCompat.getDrawable(this,R.mipmap.personal_normal));
         mTextChats.setTextColor(Color.parseColor("#abadbb"));
         mTextContact.setTextColor(Color.parseColor("#abadbb"));
         mTextFind.setTextColor(Color.parseColor("#abadbb"));
@@ -306,15 +306,15 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
         switch (position) {
             case 0:
                 mTextChats.setTextColor(Color.parseColor("#0099ff"));
-                mImageChats.setBackgroundDrawable(getResources().getDrawable(R.mipmap.info_pressed));
+                mImageChats.setBackground(ContextCompat.getDrawable(ChatActivity.this,R.mipmap.info_pressed));
                 break;
             case 1:
                 mTextContact.setTextColor(Color.parseColor("#0099ff"));
-                mImageContact.setBackgroundDrawable(getResources().getDrawable(R.mipmap.affairs_pressed));
+                mImageContact.setBackground(ContextCompat.getDrawable(ChatActivity.this,R.mipmap.affairs_pressed));
                 break;
             case 2:
                 mTextFind.setTextColor(Color.parseColor("#0099ff"));
-                mImageFind.setBackgroundDrawable(getResources().getDrawable(R.mipmap.personal_pressed));
+                mImageFind.setBackground(ContextCompat.getDrawable(ChatActivity.this,R.mipmap.personal_pressed));
                 break;
             default:
                 break;
@@ -328,6 +328,8 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
             mViewPager.setCurrentItem(0, false);
         }
     }
+
+
 
     //好友消息验证
     /*private void getConversationPush() {
@@ -379,14 +381,6 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
         }
     };*/
 }
-
-
-
-
-
-
-
-
 
 
     /*@BindView(R.id.rb_information)

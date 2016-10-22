@@ -4,6 +4,7 @@
     android:id="@+id/activity_sub_conversation_list_activtiy"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ike.taxi.chat.activity.SubConversationListActivtiy">
 
     <include layout="@layout/actionbar" />

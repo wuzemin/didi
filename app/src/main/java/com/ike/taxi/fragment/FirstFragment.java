@@ -1,9 +1,12 @@
 package com.ike.taxi.fragment;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +46,7 @@ import com.ike.taxi.route.DriveRoute;
 import com.ike.taxi.route.DriveRouteDetailActivity;
 import com.ike.taxi.route.DriveTime;
 import com.ike.taxi.utils.AMapUtil;
+import com.ike.taxi.utils.ToastUtil;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.lang.reflect.Type;
@@ -69,6 +73,8 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
 
     private Button btn_share_position;
     private final int REQUEST_CODE=1;
+
+    private Activity activity;
 
     private LatLng ll;
     private boolean flag=true;
@@ -106,7 +112,9 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("11111111111---onCreate","FirstFragm");
         view = inflater.inflate(R.layout.fragment_first, container, false);
+        activity=getActivity();
         initMap(savedInstanceState);
         initView();
         NearbyHttpUtils();
@@ -369,8 +377,11 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
         HttpUtils.getRequest(url, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Toast.makeText(getActivity(), "数据获取失败--nearby，请检查网络是否完好或服务器是否开启",
-                        Toast.LENGTH_SHORT).show();
+                Message message=new Message();
+                message.what=2;
+                handler.sendMessage(message);
+//                Toast.makeText(getActivity(), "数据获取失败--nearby，请检查网络是否完好或服务器是否开启",
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -423,8 +434,11 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
         HttpUtils.getRequest(url, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Toast.makeText(getActivity(), "数据获取失败--orbit，请检查网络是否完好或服务器是否开启",
-                        Toast.LENGTH_SHORT).show();
+                Message message=new Message();
+                message.what=1;
+                handler.sendMessage(message);
+                /*Toast.makeText(getActivity(), "数据获取失败--orbit，请检查网络是否完好或服务器是否开启",
+                        Toast.LENGTH_SHORT).show();*/
             }
 
             @Override
@@ -436,6 +450,21 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
             }
         });
     }
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    ToastUtil.show(activity,"数据获取失败--orbit，请检查网络是否完好或服务器是否开启");
+                    break;
+                case 2:
+                    ToastUtil.show(activity,"数据获取失败--nearby，请检查网络是否完好或服务器是否开启");
+                default:
+                    break;
+            }
+        }
+    };
 
 
     //显示轨迹
@@ -483,30 +512,30 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    @Override
+    /*@Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
+//        mapView.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+//        mapView.onResume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
-        /*if (null != mLocationClient) {
-            *//**
+//        mapView.onDestroy();
+        *//*if (null != mLocationClient) {
+            *//**//**
          * 如果AMapLocationClient是在当前Activity实例化的，
          * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
-         *//*
+         *//**//*
             mLocationClient.onDestroy();
-        }*/
-    }
+        }*//*
+    }*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
