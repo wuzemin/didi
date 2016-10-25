@@ -46,7 +46,6 @@ import com.ike.taxi.route.DriveRoute;
 import com.ike.taxi.route.DriveRouteDetailActivity;
 import com.ike.taxi.route.DriveTime;
 import com.ike.taxi.utils.AMapUtil;
-import com.ike.taxi.utils.ToastUtil;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.lang.reflect.Type;
@@ -456,10 +455,12 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 1:
-                    ToastUtil.show(activity,"数据获取失败--orbit，请检查网络是否完好或服务器是否开启");
+                    Log.e("==========","数据获取失败--orbit，请检查网络是否完好或服务器是否开启");
+//                    ToastUtil.show(activity,"数据获取失败--orbit，请检查网络是否完好或服务器是否开启");
                     break;
                 case 2:
-                    ToastUtil.show(activity,"数据获取失败--nearby，请检查网络是否完好或服务器是否开启");
+                    Log.e("==========","数据获取失败--nearby，请检查网络是否完好或服务器是否开启");
+//                    ToastUtil.show(activity,"数据获取失败--nearby，请检查网络是否完好或服务器是否开启");
                 default:
                     break;
             }

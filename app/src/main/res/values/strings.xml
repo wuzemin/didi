@@ -79,4 +79,8 @@
     <string name="add_contacts">添加好友</string>
     <string name="fetching">获取中……</string>
     <string name="xfyun">发送语音</string>
+
+    <string name="error_no_sdcard">没有SD卡，无法存储录音数据</string>
+    <string name="error_state_record">正在录音中，请先停止录音</string>
+    <string name="error_unknown">无法识别的错误</string>
 </resources>
