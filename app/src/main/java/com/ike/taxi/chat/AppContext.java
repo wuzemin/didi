@@ -8,6 +8,7 @@ import android.view.View;
 import com.ike.taxi.chat.activity.AMAPLocationActivity;
 import com.ike.taxi.chat.server.ContactsProvider;
 import com.ike.taxi.chat.server.SpeechProvider;
+import com.ike.taxi.chat.server.TestEndProvider;
 import com.ike.taxi.chat.server.TestProvider;
 
 import java.util.ArrayList;
@@ -130,7 +131,8 @@ public class AppContext implements RongIM.GroupUserInfoProvider,RongIMClient.Con
                 new LocationInputProvider(RongContext.getInstance()), //位置
                 new ContactsProvider(RongContext.getInstance()),  //自定义
                 new SpeechProvider(RongContext.getInstance()),  //语音
-                new TestProvider(RongContext.getInstance())
+                new TestProvider(RongContext.getInstance()),  //开始录音
+                new TestEndProvider(RongContext.getInstance()) //结束录音
         };
 
         RongIM.resetInputExtensionProvider(Conversation.ConversationType.PRIVATE, singleProvider);

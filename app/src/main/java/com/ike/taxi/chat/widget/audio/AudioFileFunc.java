@@ -59,7 +59,6 @@ public class AudioFileFunc {
         return mAudioWavPath;
     }
 
-
     /**
      * 获取编码后的AMR格式音频文件路径
      * @return
@@ -72,7 +71,6 @@ public class AudioFileFunc {
         }
         return mAudioAMRPath;
     }
-
 
     /**
      * 获取文件大小
