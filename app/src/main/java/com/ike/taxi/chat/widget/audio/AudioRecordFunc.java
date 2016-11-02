@@ -2,6 +2,7 @@ package com.ike.taxi.chat.widget.audio;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
+import android.media.MediaRecorder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * Created by Min on 2016/10/25.
+ * Created by Min on 2016/10/24.
  */
 
 public class AudioRecordFunc {
@@ -29,40 +30,36 @@ public class AudioRecordFunc {
 
     private static AudioRecordFunc mInstance;
 
-    private AudioRecordFunc(){
+    public AudioRecordFunc() {
 
     }
 
-    public synchronized static AudioRecordFunc getInstance()
-    {
-        if(mInstance == null)
+    public synchronized static AudioRecordFunc getInstance() {
+        if (mInstance == null)
             mInstance = new AudioRecordFunc();
         return mInstance;
     }
 
     public int startRecordAndFile() {
         //判断是否有外部存储设备sdcard
-        if(AudioFileFunc.isSdcardExit())
-        {
-            if(isRecord)
-            {
+        if (AudioFileFunc.isSdcardExit()) {
+            if (isRecord) {
+//                return ErrorCode.E_STATE_RECODING;
                 return ErrorCode.E_STATE_RECODING;
-            }
-            else
-            {
-                if(audioRecord == null)
+            } else {
+                if (audioRecord == null)
                     creatAudioRecord();
+
                 audioRecord.startRecording();
                 // 让录制状态为true
                 isRecord = true;
-//                stopRecordAndFile();
                 // 开启音频文件写入线程
                 new Thread(new AudioRecordThread()).start();
+
                 return ErrorCode.SUCCESS;
             }
-        }
-        else
-        {
+
+        } else {
             return ErrorCode.E_NOSDCARD;
         }
 
@@ -72,7 +69,8 @@ public class AudioRecordFunc {
         close();
     }
 
-    public long getRecordFileSize(){
+
+    public long getRecordFileSize() {
         return AudioFileFunc.getFileSize(NewAudioName);
     }
 
@@ -92,17 +90,16 @@ public class AudioRecordFunc {
         // 获取音频文件路径
         AudioName = AudioFileFunc.getRawFilePath();
         NewAudioName = AudioFileFunc.getWavFilePath();
-//        NewAudioName=AudioFileFunc.getAMRFilePath();
 
         // 获得缓冲区字节大小
         bufferSizeInBytes = AudioRecord.getMinBufferSize(AudioFileFunc.AUDIO_SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
 
-        // 创建AudioRecord对象
-        audioRecord = new AudioRecord(AudioFileFunc.AUDIO_INPUT, AudioFileFunc.AUDIO_SAMPLE_RATE,
-                AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
-    }
 
+        // 创建AudioRecord对象（修改处）
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, 16000, AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
+    }
 
     class AudioRecordThread implements Runnable {
         @Override
@@ -113,9 +110,9 @@ public class AudioRecordFunc {
     }
 
     /**
-     * 这里将数据写入文件，但是并不能播放，因为AudioRecord获得的音频是原始的裸音频，
-     * 如果需要播放就必须加入一些格式或者编码的头信息。但是这样的好处就是你可以对音频的 裸数据进行处理，比如你要做一个爱说话的TOM
-     * 猫在这里就进行音频的处理，然后重新封装 所以说这样得到的音频比较容易做一些音频的处理。
+     * 这里将数据写入文件，但是并不能播放，因为AudioRecord获得的音频是原始的裸音频
+     * 如果需要播放就必须加入一些格式或者编码的头信息。但是这样的好处就是你可以对音频的 裸数据进行处理
+     * 比如你要做一个爱说话的TOM猫在这里就进行音频的处理，然后重新封装 所以说这样得到的音频比较容易做一些音频的处理。
      */
     private void writeDateTOFile() {
         // new一个byte数组用来存一些字节数据，大小为缓冲区大小
@@ -127,13 +124,14 @@ public class AudioRecordFunc {
             if (file.exists()) {
                 file.delete();
             }
-            fos = new FileOutputStream(file);// 建立一个可存取字节的文件
+            fos = new FileOutputStream(file);
+            // 建立一个可存取字节的文件
         } catch (Exception e) {
             e.printStackTrace();
         }
         while (isRecord == true) {
             readsize = audioRecord.read(audiodata, 0, bufferSizeInBytes);
-            if (AudioRecord.ERROR_INVALID_OPERATION != readsize && fos!=null) {
+            if (AudioRecord.ERROR_INVALID_OPERATION != readsize && fos != null) {
                 try {
                     fos.write(audiodata);
                 } catch (IOException e) {
@@ -142,7 +140,7 @@ public class AudioRecordFunc {
             }
         }
         try {
-            if(fos != null)
+            if (fos != null)
                 fos.close();// 关闭写入流
         } catch (IOException e) {
             e.printStackTrace();
@@ -164,8 +162,7 @@ public class AudioRecordFunc {
             out = new FileOutputStream(outFilename);
             totalAudioLen = in.getChannel().size();
             totalDataLen = totalAudioLen + 36;
-            WriteWaveFileHeader(out, totalAudioLen, totalDataLen,
-                    longSampleRate, channels, byteRate);
+            WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
             while (in.read(data) != -1) {
                 out.write(data);
             }
@@ -181,12 +178,9 @@ public class AudioRecordFunc {
     /**
      * 这里提供一个头信息。插入这些信息就可以得到可以播放的文件。
      * 为我为啥插入这44个字节，这个还真没深入研究，不过你随便打开一个wav
-     * 音频的文件，可以发现前面的头文件可以说基本一样哦。每种格式的文件都有
-     * 自己特有的头文件。
+     * 音频的文件，可以发现前面的头文件可以说基本一样哦。每种格式的文件都有自己特有的头文件。
      */
-    private void WriteWaveFileHeader(FileOutputStream out, long totalAudioLen,
-                                     long totalDataLen, long longSampleRate, int channels, long byteRate)
-            throws IOException {
+    private void WriteWaveFileHeader(FileOutputStream out, long totalAudioLen, long totalDataLen, long longSampleRate, int channels, long byteRate) throws IOException {
         byte[] header = new byte[44];
         header[0] = 'R'; // RIFF/WAVE header
         header[1] = 'I';

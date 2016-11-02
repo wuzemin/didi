@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +21,7 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechUtility;
 import com.ike.taxi.R;
+import com.ike.taxi.chat.utils.FucUtil;
 import com.ike.taxi.chat.widget.audio.AudioRecordFunc;
 import com.ike.taxi.utils.ToastUtil;
 
@@ -56,31 +56,20 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
     private SpeechRecognizer mIat;  //语音听写对象
     private HashMap<String,String> mIatResults=new LinkedHashMap<>();
 
-    private String mEngineType;
+    private String mEngineType = SpeechConstant.TYPE_CLOUD;
     private Toast mToast;
 
     private String message;
     private AudioRecordFunc audioRecordFunc;
 
     private boolean flag=false;
-
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    ToastUtil.show(context,"说话结束");
-                    AudioRecordFunc recordFunc=AudioRecordFunc.getInstance();
-                    recordFunc.stopRecordAndFile();
-                    break;
-            }
-        }
-    };
+//    private SharedPreferences mSharedPreferences;
 
     public TestProvider(RongContext context) {
         super(context);
         this.context=context;
-        audioRecordFunc=AudioRecordFunc.getInstance();
+        /*mSharedPreferences = context.getSharedPreferences(IatSettings.PREFER_NAME,
+                Activity.MODE_PRIVATE);*/
         mWorkThread = new HandlerThread("RongDemo");
         mWorkThread.start();
         mUploadHandler = new Handler(mWorkThread.getLooper());
@@ -113,27 +102,64 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
     @Override
     public void onPluginClick(final View view) {
         ToastUtil.show(view.getContext(),"开始说话");
+        audioRecordFunc=AudioRecordFunc.getInstance();
         audioRecordFunc.startRecordAndFile();
-        initSpeech(view);
+//        audioRecordFunc.stopRecordAndFile();
+//        initSpeech(view);
     }
 
-
+    int ret=0;
    private void initSpeech(View view) {
-       mEngineType= SpeechConstant.TYPE_CLOUD;
        SpeechUtility.createUtility(view.getContext(),SpeechConstant.APPID+"=57e89480");
        mIat = SpeechRecognizer.createRecognizer(view.getContext(), mInitListener);
-       mIat.setParameter(SpeechConstant.DOMAIN,"iat");
-       mIat.setParameter(SpeechConstant.LANGUAGE,"zh_ch");
-       mIat.setParameter(SpeechConstant.ACCENT,"mandarin");
-       mIat.setParameter(SpeechConstant.ASR_PTT,"0");
-       mIat.startListening(recognizerListener);
+       // 清空参数
+       mIat.setParameter(SpeechConstant.PARAMS, null);
+
+       // 设置听写引擎
+       mIat.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
+       // 设置返回结果格式
+       mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
+
+       /*String lag = mSharedPreferences.getString("iat_language_preference",
+               "mandarin");
+       if (lag.equals("en_us")) {
+           // 设置语言
+           mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
+       } else {
+           // 设置语言
+           mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+           // 设置语言区域
+           mIat.setParameter(SpeechConstant.ACCENT, lag);
+       }
+       mIat.setParameter(SpeechConstant.VAD_BOS, mSharedPreferences.getString("iat_vadbos_preference", "4000"));
+       mIat.setParameter(SpeechConstant.VAD_EOS, mSharedPreferences.getString("iat_vadeos_preference", "1000"));
+       mIat.setParameter(SpeechConstant.ASR_PTT, mSharedPreferences.getString("iat_punc_preference", "1"));*/
+
+       mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+       mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH,
+               Environment.getExternalStorageDirectory()+"/FinalAudio.wav");
+       // 设置音频来源为外部文件
+       mIat.setParameter(SpeechConstant.AUDIO_SOURCE, "-1");
+//       mIat.setParameter(SpeechConstant.SAMPLE_RATE,"8000");
+       ret = mIat.startListening(recognizerListener);
+       if (ret != ErrorCode.SUCCESS) {
+           ToastUtil.show(context,"识别失败,错误码：" + ret);
+       } else {
+           byte[] audioData = FucUtil.readAudio(Environment.getExternalStorageDirectory()+"/FinalAudio.wav");
+           if (null != audioData) {
+               mIat.writeAudio(audioData, 0, audioData.length);
+               mIat.stopListening();
+           } else {
+               mIat.cancel();
+               ToastUtil.show(context,"读取音频流失败");
+           }
+       }
     }
 
     private RecognizerListener recognizerListener=new RecognizerListener() {
         @Override
         public void onVolumeChanged(int i, byte[] bytes) {
             Log.e("========onVolumeChanged",i+"onVolumeChanged"+bytes);
-//            mIat.writeAudio(bytes,0,bytes.length);
         }
 
         @Override
@@ -143,29 +169,20 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
 
         @Override
         public void onEndOfSpeech() {
-            Log.e("========onEndOfSpeech","onEndOfSpeech");
-            ToastUtil.show(context,"录音结束");
-            audioRecordFunc.stopRecordAndFile();
-            //音频文件
-            mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
-            mIat.setParameter(SpeechConstant.AUDIO_SOURCE,"-2");
-            mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH,
-                    Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"FinalAudio.wav");
+            Log.e("========onEndOfSpeech","onEndOfSpeeh");
+
         }
 
         @Override
         public void onResult(RecognizerResult recognizerResult, boolean b) {
-                Log.e("========onResult","onResult");
-                printResult(recognizerResult);
-                mIat.stopListening();
-
+            Log.e("========onResult",b+"");
+            printResult(recognizerResult);
         }
 
         @Override
         public void onError(SpeechError speechError) {
             ToastUtil.show(getContext(),speechError+"");
             Log.e("========onError","onError:"+speechError);
-            mIat.stopListening();
         }
 
         @Override
@@ -223,13 +240,9 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
         try {
             // 读取音频文件。
             InputStream is=context.getAssets().open("FinalAudio.wav");
-//            InputStream is=context.getAssets().open("FinalAudio.amr");
             OutputStream os = new FileOutputStream(voiceFile);
-
             byte[] buffer = new byte[1024];
-
             int bytesRead;
-
             // 写入缓存文件。
             while((bytesRead = is.read(buffer)) !=-1){
                 os.write(buffer, 0, bytesRead);

@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.Poi;
 import com.amap.api.maps.model.PolygonOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DrivePath;
@@ -59,7 +62,7 @@ import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class FirstFragment extends Fragment implements View.OnClickListener,
          View.OnTouchListener,OnLocationGetListener
-        ,AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener, DriveTime.OnRouteCalculateListener {
+        ,AMap.OnInfoWindowClickListener, AMap.OnMapLoadedListener, DriveTime.OnRouteCalculateListener, AMap.OnPOIClickListener {
     private View view;
     private MapView mapView;
     private AMap aMap;
@@ -152,6 +155,9 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
 //        aMap.setOnCameraChangeListener(this);
 
         aMap.setOnInfoWindowClickListener(this);
+
+        //底图poi点击事件
+        aMap.setOnPOIClickListener(this);
 
         //附近派单功能
 //        initNearby();//
@@ -542,6 +548,20 @@ public class FirstFragment extends Fragment implements View.OnClickListener,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPOIClick(Poi poi) {
+        aMap.clear();
+        MarkerOptions markOptiopns = new MarkerOptions();
+        markOptiopns.position(poi.getCoordinate());
+        TextView textView = new TextView(getActivity());
+        textView.setText(poi.getName());
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(Color.BLACK);
+        textView.setBackgroundResource(R.drawable.custom_info_bubble);
+        markOptiopns.icon(BitmapDescriptorFactory.fromView(textView));
+        aMap.addMarker(markOptiopns);
     }
 
     //            //显示轨迹

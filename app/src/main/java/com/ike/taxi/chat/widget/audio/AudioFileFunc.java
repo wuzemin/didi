@@ -6,7 +6,7 @@ import android.os.Environment;
 import java.io.File;
 
 /**
- * Created by Min on 2016/10/25.
+ * Created by Min on 2016/10/24.
  */
 
 public class AudioFileFunc {
@@ -59,6 +59,7 @@ public class AudioFileFunc {
         return mAudioWavPath;
     }
 
+
     /**
      * 获取编码后的AMR格式音频文件路径
      * @return
@@ -71,6 +72,7 @@ public class AudioFileFunc {
         }
         return mAudioAMRPath;
     }
+
 
     /**
      * 获取文件大小

@@ -1,6 +1,7 @@
 package com.ike.taxi.chat.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,14 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.ike.taxi.R;
+import com.ike.taxi.application.App;
 import com.ike.taxi.chat.bean.FriendInfo;
+import com.ike.taxi.chat.server.RongGenerate;
 import com.ike.taxi.widget.CircleImageView;
 
 import java.util.List;
+
+import io.rong.imageloader.core.ImageLoader;
 
 /**
  * Created by Min on 2016/10/19.
@@ -83,7 +88,7 @@ public class FriendListAdapter extends BaseAdapter implements SectionIndexer {
         } else {
             viewHolder.tvTitle.setText(this.list.get(position).getName());
         }
-        /*if (TextUtils.isEmpty(list.get(position).getPortraitUri())) {
+        if (TextUtils.isEmpty(list.get(position).getPortraitUri())) {
             String s = RongGenerate.generateDefaultAvatar(list.get(position).getName(), list.get(position).getUserId());
             ImageLoader.getInstance().displayImage(s, viewHolder.mImageView, App.getOptions());
         } else {
@@ -92,7 +97,7 @@ public class FriendListAdapter extends BaseAdapter implements SectionIndexer {
         if (context.getSharedPreferences("config", Context.MODE_PRIVATE).getBoolean("isDebug", false)) {
             viewHolder.tvUserId.setVisibility(View.VISIBLE);
             viewHolder.tvUserId.setText(list.get(position).getUserId());
-        }*/
+        }
         return convertView;
     }
 

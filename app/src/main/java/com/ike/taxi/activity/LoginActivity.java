@@ -42,12 +42,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private Button btn_login;
     private String user;
     private String pwd;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         SMSSDK.initSDK(this,APPKEY,APPSECRET); //初始化
+        sharedPreferences=getSharedPreferences("login",this.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
         initView();
 //        loadData();
     }
@@ -102,7 +106,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         }
     }
 
-    private void login(String user, String pwd) {
+    private void login(final String user, final String pwd) {
         if("".equals(user) || "".equals(pwd)) {
             Toast.makeText(LoginActivity.this,"用户名和密码不能为空",Toast.LENGTH_SHORT).show();
         }else if(user!=null && pwd!=null) {
@@ -121,9 +125,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     Type type=new TypeToken<LoginEntity>(){}.getType();
                     LoginEntity loginEntity=gson.fromJson(response,type);
                     String code=loginEntity.getCode();
-//                            Log.e("----------=",code+"");
                     if("200".equals(code)){
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        editor.putString("user",user);
+                        editor.putString("password",pwd);
+                        editor.putBoolean("login_message",true);
+                        editor.commit();
                         finish();
                     }else {
                         Toast.makeText(LoginActivity.this, "登录失败,用户名或密码错误！", Toast.LENGTH_SHORT).show();

@@ -52,7 +52,7 @@
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +61,8 @@
         </activity>
 
         <!-- 替换安装后的app照片 -->
-        <!--<activity-alias
+        <!--
+        <activity-alias
             android:name=".MainActivity"
             android:enabled="true"
             android:label="应用名称"
@@ -87,7 +88,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity-alias>-->
+        </activity-alias>
+        -->
         <!-- 替换照片 -->
 
         <activity android:name=".activity.EndActivity" />
@@ -119,7 +121,6 @@
                     android:scheme="rong" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".chat.activity.ConversationListActivity"
             android:screenOrientation="portrait"
@@ -228,6 +229,9 @@
         -->
 
         <activity android:name=".chat.activity.AMAPLocationActivity" />
+        <activity android:name=".chat.activity.IatSettings" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.LogoActivity"></activity>
     </application>
 
 </manifest>
