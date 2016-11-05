@@ -231,7 +231,7 @@
         <activity android:name=".chat.activity.AMAPLocationActivity" />
         <activity android:name=".chat.activity.IatSettings" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".activity.LogoActivity"></activity>
+        <activity android:name=".activity.LogoActivity" />
     </application>
 
 </manifest>

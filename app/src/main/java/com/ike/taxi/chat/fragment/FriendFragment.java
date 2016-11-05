@@ -23,7 +23,7 @@ import com.ike.taxi.chat.bean.FriendInfo;
 import com.ike.taxi.chat.server.CharacterParser;
 import com.ike.taxi.chat.server.PinyinComparator;
 import com.ike.taxi.chat.server.SideBar;
-import com.ike.taxi.utils.ToastUtil;
+import com.ike.taxi.utils.T;
 import com.ike.taxi.widget.image.SelectableRoundedImageView;
 
 import java.util.ArrayList;
@@ -34,6 +34,9 @@ import io.rong.imageloader.core.ImageLoader;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
+/**
+ * 好友
+ */
 public class FriendFragment extends Fragment implements View.OnClickListener {
 
     private SelectableRoundedImageView selectableRoundedImageView;
@@ -70,10 +73,6 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
     private String mCacheName;
 
     private View view;
-
-    public FriendFragment() {
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,8 +112,11 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
         mCacheName = sp.getString("loginnickname", "");
         final String header = sp.getString("loginPortrait", "");
         mNameTextView.setText(mCacheName);
-        ImageLoader.getInstance().displayImage("http://img0.imgtn.bdimg.com/it/u=1079555585,1801783759&fm=21&gp=0.jpg",selectableRoundedImageView);
-//        ImageLoader.getInstance().displayImage(TextUtils.isEmpty(header) ? RongGenerate.generateDefaultAvatar(mCacheName, mId) : header, selectableRoundedImageView, App.getOptions());
+        String imageUrl="http://pic37.nipic.com/20140120/9885883_125934577000_2.jpg";
+        ImageLoader.getInstance().displayImage(imageUrl,selectableRoundedImageView);
+//        ImageLoader.getInstance().displayImage(TextUtils.isEmpty(header) ?
+//                      RongGenerate.generateDefaultAvatar(mCacheName, mId) :
+//                      header, selectableRoundedImageView, App.getOptions());
 
         selfLayout.setOnClickListener(this);
         groupLayout.setOnClickListener(this);
@@ -173,14 +175,13 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
     }
 
     private void startFriendDetailsPage(FriendInfo friendInfo) {
-        ToastUtil.show(getActivity(),"SinleContactActivity.class");
+        T.showShort(getActivity(),"SinleContactActivity.class");
         /*Intent intent = new Intent(getActivity(), SingleContactActivity.class);
         intent.putExtra("FriendDetails", friendInfo);
         startActivity(intent);*/
     }
 
     private void initView(View view) {
-
         mSearchEditText = (EditText) view.findViewById(R.id.search);
         mListView = (ListView) view.findViewById(R.id.listview);
         mNoFriends = (TextView) view.findViewById(R.id.show_no_friend);
@@ -213,7 +214,8 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
             }
         }*/
         //实例化汉字转拼音类
-        mCharacterParser = CharacterParser.getInstance();
+        mCharacterParser = CharacterParser
+                .getInstance();
         mPinyinComparator = PinyinComparator.getInstance();
     }
 
@@ -292,7 +294,7 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.re_newfriends:
                 mUnreadTextView.setVisibility(View.GONE);
-                ToastUtil.show(getActivity(),"NewFriendListActivity.class");
+                T.showShort(getActivity(),"NewFriendListActivity.class");
                 /*Intent intent = new Intent(getActivity(), NewFriendListActivity.class);
                 startActivityForResult(intent, 20);*/
                 break;
@@ -301,10 +303,10 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
                 if (RongIM.getInstance() != null) {
                     RongIM.getInstance().startSubConversationList(getActivity(), Conversation.ConversationType.GROUP);
                 }
-//                ToastUtil.show(getActivity(),"GroupListActivity.class");
+//                T.show(getActivity(),"GroupListActivity.class");
                 break;
             case R.id.publicservice:
-                ToastUtil.show(getActivity(),"PublicServiceActivity.class");
+                T.showShort(getActivity(),"PublicServiceActivity.class");
                 /*Intent intentPublic = new Intent(getActivity(), PublicServiceActivity.class);
                 startActivity(intentPublic);*/
                 break;

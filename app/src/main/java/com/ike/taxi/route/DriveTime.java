@@ -12,7 +12,7 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkPath;
 import com.amap.api.services.route.WalkRouteResult;
-import com.ike.taxi.utils.ToastUtil;
+import com.ike.taxi.utils.T;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,11 +64,11 @@ public class DriveTime implements RouteSearch.OnRouteSearchListener{
         mFromPoint=fromPoint;
         mToPoint=toPoint;
         if(mFromPoint==null){
-            ToastUtil.show(context,"定位中，稍后再试...");
+            T.showShort(context,"定位中，稍后再试...");
             return;
         }
         if(mToPoint == null) {
-            ToastUtil.show(context, "终点未设置");
+            T.showShort(context, "终点未设置");
             return;
         }
 //        showProgressDialog();
@@ -124,13 +124,13 @@ public class DriveTime implements RouteSearch.OnRouteSearchListener{
                         listener.onRouteTime(taxiCost, dis, dur);
                     }
                 }else if(null!=driveRouteResult && driveRouteResult.getPaths()==null){
-                    ToastUtil.show(context, "对不起，没有搜索到相关数据！");
+                    T.showShort(context, "对不起，没有搜索到相关数据！");
                 }
             }else {
-                ToastUtil.show(context, "对不起，没有搜索到相关数据！");
+                T.showShort(context, "对不起，没有搜索到相关数据！");
             }
         }else {
-            ToastUtil.showerror(context, errorCode);
+            T.showerror(context, errorCode);
         }
     }
 

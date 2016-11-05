@@ -17,8 +17,14 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
-        android:text="ike" />
-
+        android:text="18819493906" />
+    <EditText
+        android:id="@+id/et2"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:text="123456" />
 
     <Button
         android:id="@+id/bt1"

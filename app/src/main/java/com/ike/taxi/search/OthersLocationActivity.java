@@ -16,7 +16,7 @@ import com.amap.api.services.core.SuggestionCity;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.ike.taxi.R;
-import com.ike.taxi.utils.ToastUtil;
+import com.ike.taxi.utils.T;
 
 import java.util.List;
 
@@ -102,16 +102,16 @@ public class OthersLocationActivity extends AppCompatActivity implements PoiSear
                             && suggestionCities.size() > 0) {
                         showSuggestCity(suggestionCities);
                     } else {
-                        ToastUtil.show(OthersLocationActivity.this,
+                        T.showShort(OthersLocationActivity.this,
                                 R.string.no_result);
                     }
                 }
             } else {
-                ToastUtil.show(OthersLocationActivity.this,
+                T.showShort(OthersLocationActivity.this,
                         R.string.no_result);
             }
         } else {
-            ToastUtil.showerror(this, rCode);
+            T.showerror(this, rCode);
         }
 
     }
@@ -126,7 +126,7 @@ public class OthersLocationActivity extends AppCompatActivity implements PoiSear
                     + cities.get(i).getCityCode() + "城市编码:"
                     + cities.get(i).getAdCode() + "\n";
         }
-        ToastUtil.show(OthersLocationActivity.this, infomation);
+        T.showShort(OthersLocationActivity.this, infomation);
 
     }
 

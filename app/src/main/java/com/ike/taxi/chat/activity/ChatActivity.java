@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,26 +20,29 @@ import android.widget.TextView;
 
 import com.ike.taxi.R;
 import com.ike.taxi.activity.LoginActivity;
-import com.ike.taxi.base.BaseActivity;
 import com.ike.taxi.chat.adapter.ConversationListAdapterEx;
 import com.ike.taxi.chat.fragment.DynamicFragment;
 import com.ike.taxi.chat.fragment.FriendFragment;
+import com.ike.taxi.widget.ChatPoputWindow;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import io.rong.imkit.RongContext;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
-public class ChatActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class ChatActivity extends FragmentActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+
+    private List<Fragment> mFragment = new ArrayList<>();
 
     private ViewPager mViewPager;
-    private List<Fragment> mFragment = new ArrayList<>();
     private ImageView mImageChats, mImageContact, mImageFind;
     private TextView mTextChats, mTextContact, mTextFind;
+    private ImageView chat_more;
 
     /**
      * 会话列表的fragment
@@ -52,8 +55,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        mContext=this;
-        isDebug=getSharedPreferences("config",MODE_PRIVATE).getBoolean("isDebug",false);
+        ButterKnife.bind(this);
+        mContext = this;
+        isDebug = getSharedPreferences("config", MODE_PRIVATE).getBoolean("isDebug", false);
         if (RongIM.getInstance() != null &&
                 RongIM.getInstance().getCurrentConnectionStatus()
                         .equals(RongIMClient.ConnectionStatusListener.ConnectionStatus.DISCONNECTED)) {
@@ -68,8 +72,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         reconnect();
                     }
                 }
-            },300);
-        }else {
+            }, 300);
+        } else {
             initViews();
             initMainViewPager();
             changeTextViewColor();
@@ -102,9 +106,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             }
         };
         mViewPager.setAdapter(fragmentPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setOnPageChangeListener(this);
-//        initData();
+        initData();
     }
 
     protected void initData() {
@@ -198,6 +202,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         RongIM.connect(cacheToken, new RongIMClient.ConnectCallback() {
                             @Override
                             public void onTokenIncorrect() {
+
                             }
 
                             @Override
@@ -249,11 +254,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         mImageFind = (ImageView) findViewById(R.id.tab_img_find);
         mTextChats = (TextView) findViewById(R.id.tab_text_chats);
         mTextContact = (TextView) findViewById(R.id.tab_text_contact);
-        mTextFind = (TextView) findViewById(R.id.tab_text_find);
+        mTextFind = (TextView)findViewById(R.id.tab_text_find);
+        chat_more= (ImageView) findViewById(R.id.chat_more);
 
         chatRLayout.setOnClickListener(this);
         contactRLayout.setOnClickListener(this);
         foundRLayout.setOnClickListener(this);
+        chat_more.setOnClickListener(this);
 //        moreImage.setOnClickListener(this);
         /*BroadcastManager.getInstance(mContext).addAction(MineFragment.SHOW_RED, new BroadcastReceiver() {
             @Override
@@ -275,6 +282,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.seal_find:
                 mViewPager.setCurrentItem(2, false);
                 break;
+            case R.id.chat_more:  //
+                ChatPoputWindow chatPoputWindow=new ChatPoputWindow(mContext);
+                chatPoputWindow.showPopupWindow(chat_more);
+                break;
+            default:
+                break;
         }
     }
 
@@ -295,26 +308,27 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void changeTextViewColor() {
-        mImageChats.setBackground(ContextCompat.getDrawable(this,R.mipmap.info_normal));
-        mImageContact.setBackground(ContextCompat.getDrawable(this,R.mipmap.affairs_normal));
-        mImageFind.setBackground(ContextCompat.getDrawable(this,R.mipmap.personal_normal));
+        mImageChats.setBackgroundDrawable(getResources().getDrawable(R.mipmap.info_normal));
+        mImageContact.setBackgroundDrawable(getResources().getDrawable(R.mipmap.affairs_normal));
+        mImageFind.setBackgroundDrawable(getResources().getDrawable(R.mipmap.personal_normal));
         mTextChats.setTextColor(Color.parseColor("#abadbb"));
         mTextContact.setTextColor(Color.parseColor("#abadbb"));
         mTextFind.setTextColor(Color.parseColor("#abadbb"));
     }
+
     private void changeSelectedTabState(int position) {
         switch (position) {
             case 0:
                 mTextChats.setTextColor(Color.parseColor("#0099ff"));
-                mImageChats.setBackground(ContextCompat.getDrawable(ChatActivity.this,R.mipmap.info_pressed));
+                mImageChats.setBackgroundDrawable(getResources().getDrawable(R.mipmap.info_pressed));
                 break;
             case 1:
                 mTextContact.setTextColor(Color.parseColor("#0099ff"));
-                mImageContact.setBackground(ContextCompat.getDrawable(ChatActivity.this,R.mipmap.affairs_pressed));
+                mImageContact.setBackgroundDrawable(getResources().getDrawable(R.mipmap.affairs_pressed));
                 break;
             case 2:
                 mTextFind.setTextColor(Color.parseColor("#0099ff"));
-                mImageFind.setBackground(ContextCompat.getDrawable(ChatActivity.this,R.mipmap.personal_pressed));
+                mImageFind.setBackgroundDrawable(getResources().getDrawable(R.mipmap.personal_pressed));
                 break;
             default:
                 break;
@@ -328,8 +342,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             mViewPager.setCurrentItem(0, false);
         }
     }
-
-
 
     //好友消息验证
     /*private void getConversationPush() {
@@ -383,6 +395,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 }
 
 
+
+
+
+
+
+
+
+
     /*@BindView(R.id.rb_information)
     RadioButton rbInformation;
     @BindView(R.id.rb_friend)
@@ -403,8 +423,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     public static final int PAGE_THREE = 2;
 
     *//**
-     * 会话列表的fragment
-     *//*
+ * 会话列表的fragment
+ *//*
     private Fragment mConversationListFragment=null;
     private Context context;
 

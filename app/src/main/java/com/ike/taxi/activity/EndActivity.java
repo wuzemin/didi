@@ -29,7 +29,7 @@ import com.ike.taxi.adapter.EndAdapter;
 import com.ike.taxi.base.BaseActivity;
 import com.ike.taxi.entity.End;
 import com.ike.taxi.utils.AMapUtil;
-import com.ike.taxi.utils.ToastUtil;
+import com.ike.taxi.utils.T;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -206,7 +206,7 @@ public class EndActivity extends BaseActivity implements View.OnClickListener,
             et_end.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }else {
-            ToastUtil.show(EndActivity.this,rCode);
+            T.showShort(EndActivity.this,rCode);
         }
     }
 

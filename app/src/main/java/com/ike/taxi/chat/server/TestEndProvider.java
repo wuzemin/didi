@@ -25,7 +25,7 @@ import com.ike.taxi.R;
 import com.ike.taxi.chat.activity.IatSettings;
 import com.ike.taxi.chat.utils.FucUtil;
 import com.ike.taxi.chat.widget.audio.AudioRecordFunc;
-import com.ike.taxi.utils.ToastUtil;
+import com.ike.taxi.utils.T;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,7 +96,7 @@ public class TestEndProvider extends InputProvider.ExtendProvider {
     int mResult=-1;
     @Override
     public void onPluginClick(final View view) {
-        ToastUtil.show(view.getContext(),"结束说话");
+        T.showShort(view.getContext(),"结束说话");
         audioRecordFunc=AudioRecordFunc.getInstance();
         audioRecordFunc.stopRecordAndFile();
         initSpeech(view);
@@ -111,7 +111,7 @@ public class TestEndProvider extends InputProvider.ExtendProvider {
         mIat.setParameter(SpeechConstant.AUDIO_SOURCE, "-1");
         ret = mIat.startListening(recognizerListener);
         if (ret != ErrorCode.SUCCESS) {
-            ToastUtil.show(view.getContext(),"识别失败,错误码：" + ret);
+            T.showShort(view.getContext(),"识别失败,错误码：" + ret);
         } else {
             byte[] audioData= FucUtil.readAudio(Environment.getExternalStorageDirectory()+"/FinalAudio.wav");
             if (null != audioData) {
@@ -119,7 +119,7 @@ public class TestEndProvider extends InputProvider.ExtendProvider {
                 mIat.stopListening();
             } else {
                 mIat.cancel();
-                ToastUtil.show(view.getContext(),"读取音频流失败");
+                T.showShort(view.getContext(),"读取音频流失败");
             }
         }
     }
@@ -133,13 +133,13 @@ public class TestEndProvider extends InputProvider.ExtendProvider {
         @Override
         public void onBeginOfSpeech() {
             Log.e("========onBeginOfSpeech","onBeginOfSpeech");
-//            ToastUtil.show(context,"录音开始");
+//            T.show(context,"录音开始");
         }
 
         @Override
         public void onEndOfSpeech() {
             Log.e("========onEndOfSpeech","onEndOfSpeech");
-//            ToastUtil.show(context,"录音结束");
+//            T.show(context,"录音结束");
 //            mIat.stopListening();
 
         }
@@ -235,7 +235,7 @@ public class TestEndProvider extends InputProvider.ExtendProvider {
             Log.d("===", "SpeechRecognizer init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
 //                showTip("初始化失败误码：" + code);
-                ToastUtil.show(getContext(),"初始化失败，错误码：" + code);
+                T.showShort(getContext(),"初始化失败，错误码：" + code);
             }
         }
     };
@@ -332,7 +332,7 @@ public class TestEndProvider extends InputProvider.ExtendProvider {
         mIat.setParameter(SpeechConstant.AUDIO_SOURCE, "-1");
         ret = mIat.startListening(recognizerListener);
         if (ret != ErrorCode.SUCCESS) {
-            ToastUtil.show(getContext(),"识别失败,错误码：" + ret);
+            T.show(getContext(),"识别失败,错误码：" + ret);
         } else {
             byte[] audioData=FucUtil.readAudio(Environment.getExternalStorageDirectory()+"/FinalAudio.wav");
             if (null != audioData) {
@@ -340,6 +340,6 @@ public class TestEndProvider extends InputProvider.ExtendProvider {
                 mIat.stopListening();
             } else {
                 mIat.cancel();
-                ToastUtil.show(getContext(),"读取音频流失败");
+                T.show(getContext(),"读取音频流失败");
             }
         }*/

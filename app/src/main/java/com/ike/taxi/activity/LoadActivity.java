@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.ike.taxi.MainActivity;
 import com.ike.taxi.R;
 import com.ike.taxi.adapter.LoadViewPagerAdapter;
 
@@ -30,7 +31,7 @@ public class LoadActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
         boolean bool=sharedPreferences.getBoolean("boolean",false);
         if(bool){
-            startActivity(new Intent(LoadActivity.this,LogoActivity.class));
+            startActivity(new Intent(LoadActivity.this,MainActivity.class));
             finish();
         }
         initView();
@@ -73,7 +74,7 @@ public class LoadActivity extends AppCompatActivity {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(LoadActivity.this, LogoActivity.class);
+            Intent intent = new Intent(LoadActivity.this, MainActivity.class);
             startActivity(intent);
             editor.putBoolean("boolean", true);
             editor.commit();

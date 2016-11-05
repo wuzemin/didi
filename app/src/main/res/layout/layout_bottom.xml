@@ -26,10 +26,10 @@
             android:layout_weight="1">
 
 
-            <FrameLayout
+            <!--<FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_centerInParent="true">
+                android:layout_centerInParent="true">-->
 
                 <RelativeLayout
                     android:id="@+id/ll"
@@ -75,9 +75,7 @@
                      android:visibility="invisible" />-->
 
 
-            </FrameLayout>
-
-
+            <!--</FrameLayout>-->
         </RelativeLayout>
 
         <RelativeLayout
@@ -113,8 +111,6 @@
                     android:text="@string/friend"
                     android:textColor="#abadbb"
                     android:textSize="12sp" />
-
-
             </RelativeLayout>
         </RelativeLayout>
 

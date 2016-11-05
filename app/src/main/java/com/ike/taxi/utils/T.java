@@ -8,15 +8,54 @@ import android.widget.Toast;
 
 import com.amap.api.services.core.AMapException;
 
-public class ToastUtil {
+/**
+ * Toast封装类
+ */
+public class T {
 
-	public static void show(Context context, String info) {
+    public T(){
+        throw new UnsupportedOperationException("cannot be instantiated");
+    }
+    public static boolean isShow=true;
+
+    public static void showShort(Context context,CharSequence message){
+        if(isShow){
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void showShort(Context context,int message){
+        if(isShow){
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void showLong(Context context,CharSequence message){
+        if(isShow){
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void showLong(Context context,int message){
+        if(isShow){
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+	/*public static void show(Context context, String info) {
 		Toast.makeText(context, info, Toast.LENGTH_LONG).show();
 	}
 
 	public static void show(Context context, int info) {
 		Toast.makeText(context, info, Toast.LENGTH_LONG).show();
 	}
+
+    public static void showshort(Context context,String info){
+        Toast.makeText(context, info, Toast.LENGTH_LONG).show();
+    }
+    public static void showshort(Context context,int info){
+        Toast.makeText(context, info, Toast.LENGTH_LONG).show();
+    }*/
 	
 	public static void showerror(Context context, int rCode){
 		try {

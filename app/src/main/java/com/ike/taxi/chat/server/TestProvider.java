@@ -23,7 +23,7 @@ import com.iflytek.cloud.SpeechUtility;
 import com.ike.taxi.R;
 import com.ike.taxi.chat.utils.FucUtil;
 import com.ike.taxi.chat.widget.audio.AudioRecordFunc;
-import com.ike.taxi.utils.ToastUtil;
+import com.ike.taxi.utils.T;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -101,7 +101,7 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
      */
     @Override
     public void onPluginClick(final View view) {
-        ToastUtil.show(view.getContext(),"开始说话");
+        T.showShort(view.getContext(),"开始说话");
         audioRecordFunc=AudioRecordFunc.getInstance();
         audioRecordFunc.startRecordAndFile();
 //        audioRecordFunc.stopRecordAndFile();
@@ -143,7 +143,7 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
 //       mIat.setParameter(SpeechConstant.SAMPLE_RATE,"8000");
        ret = mIat.startListening(recognizerListener);
        if (ret != ErrorCode.SUCCESS) {
-           ToastUtil.show(context,"识别失败,错误码：" + ret);
+           T.showShort(context,"识别失败,错误码：" + ret);
        } else {
            byte[] audioData = FucUtil.readAudio(Environment.getExternalStorageDirectory()+"/FinalAudio.wav");
            if (null != audioData) {
@@ -151,7 +151,7 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
                mIat.stopListening();
            } else {
                mIat.cancel();
-               ToastUtil.show(context,"读取音频流失败");
+               T.showShort(context,"读取音频流失败");
            }
        }
     }
@@ -159,7 +159,7 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
     private RecognizerListener recognizerListener=new RecognizerListener() {
         @Override
         public void onVolumeChanged(int i, byte[] bytes) {
-            Log.e("========onVolumeChanged",i+"onVolumeChanged"+bytes);
+//            Log.e("========onVolumeChanged",i+"onVolumeChanged"+bytes);
         }
 
         @Override
@@ -181,7 +181,7 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
 
         @Override
         public void onError(SpeechError speechError) {
-            ToastUtil.show(getContext(),speechError+"");
+            T.showShort(getContext(),speechError+"");
             Log.e("========onError","onError:"+speechError);
         }
 
@@ -280,20 +280,20 @@ public class TestProvider extends  InputProvider.ExtendProvider implements View.
             Log.d("===", "SpeechRecognizer init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
 //                showTip("初始化失败误码：" + code);
-                ToastUtil.show(context,"初始化失败，错误码：" + code);
+                T.showShort(context,"初始化失败，错误码：" + code);
             }
         }
     };
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        ToastUtil.show(view.getContext(),"dsdafasdfa");
+        T.showShort(view.getContext(),"dsdafasdfa");
         return false;
     }
 
     @Override
     public boolean onLongClick(View view) {
-        ToastUtil.show(view.getContext(),"onlongClick");
+        T.showShort(view.getContext(),"onlongClick");
         return false;
     }
 }

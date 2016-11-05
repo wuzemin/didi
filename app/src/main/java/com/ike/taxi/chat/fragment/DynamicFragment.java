@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 
 import com.ike.taxi.R;
 
+/**
+ * 动态
+ */
 public class DynamicFragment extends Fragment {
 
     private static Activity act;
