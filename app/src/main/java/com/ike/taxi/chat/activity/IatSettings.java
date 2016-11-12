@@ -11,6 +11,7 @@ import com.ike.taxi.chat.widget.SettingTextWatcher;
 
 /**
  * Created by Min on 2016/10/29.
+ * 讯飞语音设置
  */
 
 public class IatSettings extends PreferenceActivity implements Preference.OnPreferenceChangeListener {

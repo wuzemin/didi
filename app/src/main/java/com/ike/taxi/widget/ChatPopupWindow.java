@@ -1,6 +1,7 @@
 package com.ike.taxi.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +10,17 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.ike.taxi.R;
-import com.ike.taxi.utils.T;
+import com.ike.taxi.chat.activity.AddFriendActivity;
+import com.ike.taxi.chat.activity.SelectFriendsActivity;
 
 /**
  * Created by Min on 2016/11/5.
  */
 
-public class ChatPoputWindow extends PopupWindow implements View.OnClickListener {
+public class ChatPopupWindow extends PopupWindow implements View.OnClickListener {
     private Context context;
 
-    public ChatPoputWindow(Context context) {
+    public ChatPopupWindow(Context context) {
         this.context=context;
         LayoutInflater inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view=inflater.inflate(R.layout.popupwindow_chat,null);
@@ -50,13 +52,21 @@ public class ChatPoputWindow extends PopupWindow implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.ll_pop_chat:
-                T.showShort(context,"发起聊天");
+//                T.showShort(context,"发起聊天");
+                context.startActivity(new Intent(context,SelectFriendsActivity.class));
+                ChatPopupWindow.this.dismiss();
                 break;
             case R.id.ll_pop_group:
-                T.showShort(context,"创建群组");
+//                T.showShort(context,"创建群组");
+                Intent intent=new Intent(context,SelectFriendsActivity.class);
+                intent.putExtra("isGroup",true);
+                context.startActivity(intent);
+                ChatPopupWindow.this.dismiss();
                 break;
             case R.id.ll_pop_add:
-                T.showShort(context,"添加好友");
+//                T.showShort(context,"添加好友");
+                context.startActivity(new Intent(context, AddFriendActivity.class));
+                ChatPopupWindow.this.dismiss();
                 break;
             default:
                 break;

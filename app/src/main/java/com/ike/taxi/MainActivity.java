@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
  * 主界面
  */
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
     @BindView(R.id.iv_taxi)
@@ -58,8 +59,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         initView();
         changeTextViewColor();
         changeSelectedTabState(0);
-//        initView();
-
     }
 
     private void initView() {
@@ -77,7 +76,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             public Fragment getItem(int position) {
                 return mFragment.get(position);
             }
-
             @Override
             public int getCount() {
                 return mFragment.size();

@@ -85,7 +85,12 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         //        ImageLoader.getInstance().displayImage(url, (ImageView) getView(viewId));
         return this;
     }
-    public BaseRecyclerHolder setImageURl(){
+    /**
+     * 实现多选
+     */
+    public BaseRecyclerHolder setSelectListener(int viewId,View.OnClickListener listener){
+        View view=getView(viewId);
+        view.setOnClickListener(listener);
         return this;
     }
 }

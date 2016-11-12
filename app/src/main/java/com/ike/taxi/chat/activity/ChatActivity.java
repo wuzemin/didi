@@ -23,7 +23,7 @@ import com.ike.taxi.activity.LoginActivity;
 import com.ike.taxi.chat.adapter.ConversationListAdapterEx;
 import com.ike.taxi.chat.fragment.DynamicFragment;
 import com.ike.taxi.chat.fragment.FriendFragment;
-import com.ike.taxi.widget.ChatPoputWindow;
+import com.ike.taxi.widget.ChatPopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.message.ContactNotificationMessage;
 
 public class ChatActivity extends FragmentActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
@@ -120,14 +121,14 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
         };
 
         /*Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {  //红点
             @Override
             public void run() {
                 RongIM.getInstance().setOnReceiveUnreadCountChangedListener(mCountListener, conversationTypes);
             }
         }, 500);*/
 
-//        getConversationPush();// 获取 push 的 id 和 target
+        getConversationPush();// 获取 push 的 id 和 target
 
         getPushMessage();
 
@@ -283,8 +284,8 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
                 mViewPager.setCurrentItem(2, false);
                 break;
             case R.id.chat_more:  //
-                ChatPoputWindow chatPoputWindow=new ChatPoputWindow(mContext);
-                chatPoputWindow.showPopupWindow(chat_more);
+                ChatPopupWindow chatPopupWindow =new ChatPopupWindow(mContext);
+                chatPopupWindow.showPopupWindow(chat_more);
                 break;
             default:
                 break;
@@ -344,7 +345,7 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
     }
 
     //好友消息验证
-    /*private void getConversationPush() {
+    private void getConversationPush() {
         if (getIntent() != null && getIntent().hasExtra("PUSH_CONVERSATIONTYPE") && getIntent().hasExtra("PUSH_TARGETID")) {
 
             final String conversationType = getIntent().getStringExtra("PUSH_CONVERSATIONTYPE");
@@ -375,7 +376,7 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
                 }
             });
         }
-    }*/
+    }
 
     //红点
     /*public RongIM.OnReceiveUnreadCountChangedListener mCountListener = new RongIM.OnReceiveUnreadCountChangedListener() {
@@ -393,137 +394,3 @@ public class ChatActivity extends FragmentActivity implements View.OnClickListen
         }
     };*/
 }
-
-
-
-
-
-
-
-
-
-
-    /*@BindView(R.id.rb_information)
-    RadioButton rbInformation;
-    @BindView(R.id.rb_friend)
-    RadioButton rbFriend;
-    @BindView(R.id.rb_dynamic)
-    RadioButton rbDynamic;
-    @BindView(rg_tab_bar)
-    RadioGroup rgTabBar;
-    @BindView(R.id.div_tab_bar)
-    View divTabBar;
-    @BindView(R.id.vpager)
-    ViewPager vpager;
-
-    private MyFragmentAdapter adapter;
-
-    public static final int PAGE_ONE = 0;
-    public static final int PAGE_TWO = 1;
-    public static final int PAGE_THREE = 2;
-
-    *//**
- * 会话列表的fragment
- *//*
-    private Fragment mConversationListFragment=null;
-    private Context context;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
-        ButterKnife.bind(this);
-        Fragment conversataionList=initConversationList();
-        adapter = new MyFragmentAdapter(getSupportFragmentManager());
-        initView();
-        rbInformation.setChecked(true);
-    }
-
-    private Fragment initConversationList(){
-        if(mConversationListFragment==null){
-            ConversationListFragment listFragment=ConversationListFragment.getInstance();
-            listFragment.setAdapter(new ConversationListAdapterEx(RongContext.getInstance()));
-            Uri uri;
-            if(true) {
-                uri = Uri.parse("rong;//" + getApplicationInfo().packageName).buildUpon()
-                        .appendPath("conversationlist")
-                        .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false") //设置私聊会话是否聚合显示
-                        .appendQueryParameter(Conversation.ConversationType.GROUP.getName(), "false")//群组
-                        .appendQueryParameter(Conversation.ConversationType.PUBLIC_SERVICE.getName(), "false")//公共服务号
-                        .appendQueryParameter(Conversation.ConversationType.APP_PUBLIC_SERVICE.getName(), "false")//订阅号
-                        .appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(), "true")//系统
-                        .appendQueryParameter(Conversation.ConversationType.DISCUSSION.getName(), "false")
-                        .build();
-            }else {
-                uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()
-                        .appendPath("conversationlist")
-                        .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false") //设置私聊会话是否聚合显示
-                        .appendQueryParameter(Conversation.ConversationType.GROUP.getName(), "false")//群组
-                        .appendQueryParameter(Conversation.ConversationType.PUBLIC_SERVICE.getName(), "false")//公共服务号
-                        .appendQueryParameter(Conversation.ConversationType.APP_PUBLIC_SERVICE.getName(), "false")//订阅号
-                        .appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(), "true")//系统
-                        .build();
-            }
-            listFragment.setUri(uri);
-            return listFragment;
-        }else {
-            return mConversationListFragment;
-        }
-    }
-
-    private void initView() {
-        rgTabBar.setOnCheckedChangeListener(this);
-
-        vpager = (ViewPager) findViewById(R.id.vpager);
-        vpager.setAdapter(adapter);
-        vpager.setCurrentItem(0);
-        vpager.addOnPageChangeListener(this);
-
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.rb_information:
-                vpager.setCurrentItem(PAGE_ONE);
-                break;
-            case R.id.rb_friend:
-                vpager.setCurrentItem(PAGE_TWO);
-                break;
-            case R.id.rb_dynamic:
-                vpager.setCurrentItem(PAGE_THREE);
-                break;
-//            case R.id.rb_setting:
-//                vpager.setCurrentItem(PAGE_FOUR);
-//                break;
-        }
-    }
-
-    //重写ViewPager页面切换的处理方法
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        //state的状态有三个，0表示什么都没做，1正在滑动，2滑动完毕
-        if (state == 2) {
-            switch (vpager.getCurrentItem()) {
-                case PAGE_ONE:
-                    rbInformation.setChecked(true);
-                    break;
-                case PAGE_TWO:
-                    rbFriend.setChecked(true);
-                    break;
-                case PAGE_THREE:
-                    rbDynamic.setChecked(true);
-                    break;
-            }
-        }
-    }
-}
-*/

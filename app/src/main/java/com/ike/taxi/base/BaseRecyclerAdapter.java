@@ -2,12 +2,15 @@ package com.ike.taxi.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import com.ike.taxi.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +26,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     private OnItemClickListener listener;//点击事件监听器
     private OnItemLongClickListener longClickListener;//长按监听器
     private RecyclerView recyclerView;
+    private SparseBooleanArray selectedItems;//记录选择的item
+    private CheckBox checkBox;
 
     //在RecyclerView提供数据的时候调用
     @Override
@@ -67,6 +72,65 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     public void delete(int position) {
         list.remove(position);
         notifyItemRemoved(position);
+    }
+
+    /**
+     * 判读是否选中
+     */
+    public boolean isSelected(int position){
+        return getSelectedItems().contains(position);
+    }
+
+    /**
+     * 切换选中或取消选中
+     */
+    public void switchSelectedState(int position){
+        if(selectedItems.get(position, false)){
+            selectedItems.delete(position);
+        }else{
+            selectedItems.put(position,true);
+        }
+        notifyItemChanged(position);
+    }
+
+    /**
+     * 清除所有选中item的标记
+     */
+    public void clearSelectedState(){
+        List<Integer> selection = getSelectedItems();
+        selectedItems.clear();
+        for(Integer i : selection){
+            notifyItemChanged(i);
+        }
+    }
+
+    /**
+     * 全选
+     */
+    public void selectAllItems(){
+        clearSelectedState();
+        for(int i = 0; i < getItemCount(); i++){
+            selectedItems.put(i,true);
+            notifyItemChanged(i);
+        }
+    }
+
+    /**
+     * 获取item数目
+     */
+    public int getSelectedItemCount(){
+        return selectedItems.size();
+    }
+
+    /**
+     * 获取选中的items
+     */
+    public List<Integer> getSelectedItems(){
+        List<Integer> items = new ArrayList<>(selectedItems.size());
+        for(int i = 0; i < selectedItems.size(); i++){
+            items.add(selectedItems.keyAt(i));
+        }
+        return items;
     }
 
     public BaseRecyclerAdapter(Context context, List<T> list, int itemLayoutId) {

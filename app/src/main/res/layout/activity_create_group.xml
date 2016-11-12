@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_group"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ike.taxi.chat.activity.CreateGroupActivity">
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/blue2">
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_marginLeft="10dp"
+            android:drawableLeft="@mipmap/de_title_back"
+            android:layout_gravity="center_vertical"
+            android:text="@string/create_group"
+            style="@style/text_style" />
+    </LinearLayout>
+    <com.ike.taxi.widget.image.SelectableRoundedImageView
+        android:src="@mipmap/nav_btn_plus_press"
+        android:id="@+id/siv_group_icon"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ll"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+    <EditText
+        android:id="@+id/et_group_name"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:layout_below="@+id/siv_group_icon"
+        android:hint="填写群名称"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_confirm"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_40"
+        android:background="@color/blue2"
+        android:layout_margin="20dp"
+        android:layout_below="@+id/et_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"/>
+</RelativeLayout>

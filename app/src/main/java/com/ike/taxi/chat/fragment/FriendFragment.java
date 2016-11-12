@@ -1,6 +1,7 @@
 package com.ike.taxi.chat.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,15 +18,23 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ike.taxi.R;
+import com.ike.taxi.application.App;
+import com.ike.taxi.chat.activity.FriendDetailsActivity;
 import com.ike.taxi.chat.adapter.FriendListAdapter;
 import com.ike.taxi.chat.bean.FriendInfo;
 import com.ike.taxi.chat.server.CharacterParser;
 import com.ike.taxi.chat.server.PinyinComparator;
+import com.ike.taxi.chat.server.RongGenerate;
 import com.ike.taxi.chat.server.SideBar;
+import com.ike.taxi.network.HttpUtils;
 import com.ike.taxi.utils.T;
 import com.ike.taxi.widget.image.SelectableRoundedImageView;
+import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +42,7 @@ import java.util.List;
 import io.rong.imageloader.core.ImageLoader;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
+import okhttp3.Call;
 
 /**
  * 好友
@@ -80,12 +90,75 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
         view=inflater.inflate(R.layout.fragment_friend, container, false);
         initView(view);
         initData();
+        refreshUIListener();
+        return view;
+    }
+
+    private void startFriendDetailsPage(FriendInfo friendInfo) {
+        Intent intent = new Intent(getActivity(), FriendDetailsActivity.class);
+        intent.putExtra("FriendDetails", friendInfo);
+        startActivity(intent);
+    }
+
+    private void initView(View view) {
+        mSearchEditText = (EditText) view.findViewById(R.id.search);
+        mListView = (ListView) view.findViewById(R.id.listview);
+        mNoFriends = (TextView) view.findViewById(R.id.show_no_friend);
+        SideBar mSidBar = (SideBar) view.findViewById(R.id.sidrbar);
+        mDialogTextView = (TextView) view.findViewById(R.id.group_dialog);
+        mSidBar.setTextView(mDialogTextView);
+        //设置右侧触摸监听
+        mSidBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+
+            @Override
+            public void onTouchingLetterChanged(String s) {
+                //该字母首次出现的位置
+                int position = mFriendListAdapter.getPositionForSection(s.charAt(0));
+                if (position != -1) {
+                    mListView.setSelection(position);
+                }
+
+            }
+        });
+    }
+
+    private void initData() {
+        mSourceFriendList = new ArrayList<>();
+        mFriendInfoList = new ArrayList<>();
+        mFilteredFriendList = new ArrayList<>();
+        HttpUtils.postRequest("/friendinfo", new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                T.showShort(getActivity(),"friendinfo----连接错误");
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Gson gson=new Gson();
+                Type type=new TypeToken<List<FriendInfo>>(){}.getType();
+                List<FriendInfo> list=gson.fromJson(response,type);
+                if(list!=null && list.size()>0){
+                    for(FriendInfo friend:list){
+                        Log.e("===========",friend.getUserId());
+                        mSourceFriendList.add(new FriendInfo(friend.getUserId(),friend.getName(),friend.getPortraitUri(),
+                                friend.getDisplayName(),null,null));
+                    }
+                }
+                //实例化汉字转拼音类
+                mCharacterParser = CharacterParser
+                        .getInstance();
+                mPinyinComparator = PinyinComparator.getInstance();
+                initList();
+            }
+        });
+    }
+
+    private void initList() {
         if (mSourceFriendList != null && mSourceFriendList.size() > 0) {
             mFriendInfoList = labelSourceFriendList(mSourceFriendList); //过滤数据为有字母的字段  现在有字母 别的数据没有
         } else {
             mNoFriends.setVisibility(View.VISIBLE);
         }
-
         //还原除了带字母字段的其他数据
         for (int i = 0; i < mSourceFriendList.size(); i++) {
             mFriendInfoList.get(i).setName(mSourceFriendList.get(i).getName());
@@ -93,13 +166,11 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
             mFriendInfoList.get(i).setPortraitUri(mSourceFriendList.get(i).getPortraitUri());
             mFriendInfoList.get(i).setDisplayName(mSourceFriendList.get(i).getDisplayName());
         }
-
         // 根据a-z进行排序源数据
         Collections.sort(mFriendInfoList, mPinyinComparator);
 
         LayoutInflater mLayoutInflater = LayoutInflater.from(getActivity());
-        mHeadView = mLayoutInflater.inflate(R.layout.item_contact_list_header,
-                null);
+        mHeadView = mLayoutInflater.inflate(R.layout.item_contact_list_header,null);
         mUnreadTextView = (TextView) mHeadView.findViewById(R.id.tv_unread);
         RelativeLayout newFriendsLayout = (RelativeLayout) mHeadView.findViewById(R.id.re_newfriends);
         RelativeLayout groupLayout = (RelativeLayout) mHeadView.findViewById(R.id.re_chatroom);
@@ -112,12 +183,9 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
         mCacheName = sp.getString("loginnickname", "");
         final String header = sp.getString("loginPortrait", "");
         mNameTextView.setText(mCacheName);
-        String imageUrl="http://pic37.nipic.com/20140120/9885883_125934577000_2.jpg";
-        ImageLoader.getInstance().displayImage(imageUrl,selectableRoundedImageView);
-//        ImageLoader.getInstance().displayImage(TextUtils.isEmpty(header) ?
-//                      RongGenerate.generateDefaultAvatar(mCacheName, mId) :
-//                      header, selectableRoundedImageView, App.getOptions());
-
+        ImageLoader.getInstance().displayImage(TextUtils.isEmpty(header) ?
+                RongGenerate.generateDefaultAvatar(mCacheName, mId) :
+                header, selectableRoundedImageView, App.getOptions());
         selfLayout.setOnClickListener(this);
         groupLayout.setOnClickListener(this);
         newFriendsLayout.setOnClickListener(this);
@@ -170,53 +238,6 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-//        refreshUIListener();
-        return view;
-    }
-
-    private void startFriendDetailsPage(FriendInfo friendInfo) {
-        T.showShort(getActivity(),"SinleContactActivity.class");
-        /*Intent intent = new Intent(getActivity(), SingleContactActivity.class);
-        intent.putExtra("FriendDetails", friendInfo);
-        startActivity(intent);*/
-    }
-
-    private void initView(View view) {
-        mSearchEditText = (EditText) view.findViewById(R.id.search);
-        mListView = (ListView) view.findViewById(R.id.listview);
-        mNoFriends = (TextView) view.findViewById(R.id.show_no_friend);
-        SideBar mSidBar = (SideBar) view.findViewById(R.id.sidrbar);
-        mDialogTextView = (TextView) view.findViewById(R.id.group_dialog);
-        mSidBar.setTextView(mDialogTextView);
-        //设置右侧触摸监听
-        mSidBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
-
-            @Override
-            public void onTouchingLetterChanged(String s) {
-                //该字母首次出现的位置
-                int position = mFriendListAdapter.getPositionForSection(s.charAt(0));
-                if (position != -1) {
-                    mListView.setSelection(position);
-                }
-
-            }
-        });
-    }
-
-    private void initData() {
-        mSourceFriendList = new ArrayList<>();
-        mFriendInfoList = new ArrayList<>();
-        mFilteredFriendList = new ArrayList<>();
-        /*List<cn.rongcloud.im.db.Friend> list = DBManager.getInstance(getActivity()).getDaoSession().getFriendDao().loadAll();
-        if (list != null && list.size() > 0) {
-            for (cn.rongcloud.im.db.Friend friend : list) {
-                mSourceFriendList.add(new FriendInfo(friend.getUserId(), friend.getName(), friend.getPortraitUri(), friend.getDisplayName(), null, null));
-            }
-        }*/
-        //实例化汉字转拼音类
-        mCharacterParser = CharacterParser
-                .getInstance();
-        mPinyinComparator = PinyinComparator.getInstance();
     }
 
 
@@ -318,8 +339,9 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    /*private void refreshUIListener() {
-        BroadcastManager.getInstance(getActivity()).addAction(SealAppContext.UPDATE_FRIEND, new BroadcastReceiver() {
+    private void refreshUIListener() {
+
+        /*BroadcastManager.getInstance(getActivity()).addAction(SealAppContext.UPDATE_FRIEND, new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String command = intent.getAction();
@@ -348,9 +370,8 @@ public class FriendFragment extends Fragment implements View.OnClickListener {
                 mNameTextView.setText(mCacheName);
                 ImageLoader.getInstance().displayImage(TextUtils.isEmpty(header) ? RongGenerate.generateDefaultAvatar(mCacheName, mId) : header, mSelectableRoundedImageView, App.getOptions());
             }
-        });
-
-    }*/
+        });*/
+    }
 
 
     @Override

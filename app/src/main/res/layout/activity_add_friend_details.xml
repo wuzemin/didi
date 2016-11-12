@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_friend_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ike.taxi.chat.activity.AddFriendDetailsActivity">
+
+    <TextView
+        android:paddingLeft="10dp"
+        android:textColor="@color/white"
+        android:gravity="center_vertical"
+        android:background="@color/blue2"
+        android:text="详细信息"
+        android:id="@+id/detail"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        />
+
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_friend_head"
+        android:layout_toRightOf="@+id/iv_friend_head"
+        android:layout_toEndOf="@+id/iv_friend_head"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="11dp"
+        android:id="@+id/tv_friend_name" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/rc_default_portrait"
+        android:layout_marginLeft="22dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="64dp"
+        android:id="@+id/iv_friend_head"
+        android:layout_below="@+id/detail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:textSize="22sp"
+        android:textColor="@color/white"
+        android:background="@color/blue2"
+        android:text="@string/add_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_add_friend"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
+        android:layout_below="@+id/iv_friend_head"/>
+</RelativeLayout>

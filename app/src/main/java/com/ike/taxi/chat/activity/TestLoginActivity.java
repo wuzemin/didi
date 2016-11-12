@@ -15,9 +15,9 @@ import com.google.gson.reflect.TypeToken;
 import com.ike.taxi.R;
 import com.ike.taxi.application.App;
 import com.ike.taxi.base.BaseActivity;
-import com.ike.taxi.chat.DemoContext;
 import com.ike.taxi.chat.bean.LoginResult;
 import com.ike.taxi.network.HttpUtils;
+import com.ike.taxi.utils.CommonUtils;
 import com.ike.taxi.utils.T;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -29,6 +29,9 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import okhttp3.Call;
 
+/**
+ * 模拟登陆
+ */
 public class TestLoginActivity extends BaseActivity {
 
     @BindView(R.id.et1)
@@ -51,11 +54,15 @@ public class TestLoginActivity extends BaseActivity {
 
     private String user;
     private String password;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_login);
+        sp=getSharedPreferences("config",MODE_PRIVATE);
+        editor=sp.edit();
         ButterKnife.bind(this);
         initView();
     }
@@ -70,6 +77,10 @@ public class TestLoginActivity extends BaseActivity {
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!CommonUtils.isNetConnect(mContext)){
+                    T.showShort(mContext,R.string.no_network);
+                    return;
+                }
                 user = et1.getText().toString().trim();
                 password=et2.getText().toString().trim();
                 initToken();
@@ -97,7 +108,6 @@ public class TestLoginActivity extends BaseActivity {
                     String nickName=loginResult.getMsg().getNickname();
                     String portraitUri=loginResult.getMsg().getPortrait();
                     connect(token);
-                    SharedPreferences.Editor editor= DemoContext.getInstance().getSharedPreferences().edit();
                     editor.putString("loginToken", token);
                     editor.putString("loginphone", user);
                     editor.putString("loginpassword", password);

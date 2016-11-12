@@ -17,7 +17,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
-        android:text="18819493906" />
+        android:text="swk" />
     <EditText
         android:id="@+id/et2"
         android:layout_width="match_parent"

@@ -33,6 +33,11 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+    <!-- 拨打电话 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 发送短信 -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:name=".application.App"
         android:allowBackup="true"
@@ -232,6 +237,12 @@
         <activity android:name=".chat.activity.IatSettings" />
         <activity android:name=".MainActivity" />
         <activity android:name=".activity.LogoActivity" />
+        <activity android:name=".chat.activity.AddFriendActivity" />
+        <activity android:name=".chat.activity.AddFriendDetailsActivity" />
+        <activity android:name=".chat.activity.NewFriendListActivity" />
+        <activity android:name=".chat.activity.FriendDetailsActivity" />
+        <activity android:name=".chat.activity.SelectFriendsActivity" />
+        <activity android:name=".chat.activity.CreateGroupActivity"></activity>
     </application>
 
 </manifest>

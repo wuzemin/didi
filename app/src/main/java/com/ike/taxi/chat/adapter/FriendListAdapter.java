@@ -13,7 +13,7 @@ import com.ike.taxi.R;
 import com.ike.taxi.application.App;
 import com.ike.taxi.chat.bean.FriendInfo;
 import com.ike.taxi.chat.server.RongGenerate;
-import com.ike.taxi.widget.CircleImageView;
+import com.ike.taxi.widget.image.SelectableRoundedImageView;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class FriendListAdapter extends BaseAdapter implements SectionIndexer {
             convertView = LayoutInflater.from(context).inflate(R.layout.friend_item, null);
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.friendname);
             viewHolder.tvLetter = (TextView) convertView.findViewById(R.id.catalog);
-            viewHolder.mImageView = (CircleImageView) convertView.findViewById(R.id.frienduri);
+            viewHolder.mImageView = (SelectableRoundedImageView) convertView.findViewById(R.id.frienduri);
             viewHolder.tvUserId = (TextView) convertView.findViewById(R.id.friend_id);
             convertView.setTag(viewHolder);
         } else {
@@ -137,7 +137,8 @@ public class FriendListAdapter extends BaseAdapter implements SectionIndexer {
         /**
          * 头像
          */
-        CircleImageView mImageView;
+        SelectableRoundedImageView mImageView;
+//        CircleImageView mImageView;
         /**
          * userid
          */

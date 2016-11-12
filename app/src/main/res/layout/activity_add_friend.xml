@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_friend"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ike.taxi.chat.activity.AddFriendActivity">
+    <EditText
+        android:text="8812345678"
+        android:id="@+id/et_search_friends"
+        android:maxLength="11"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/sealtalk_search" />
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_friend"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.ike.taxi.widget.image.SelectableRoundedImageView
+            android:layout_marginLeft="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/taxi"
+            android:id="@+id/siv_friend"/>
+        <TextView
+            android:text="18812345678"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_friend"/>
+    </LinearLayout>
+
+
+</LinearLayout>

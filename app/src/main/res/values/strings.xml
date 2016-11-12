@@ -89,10 +89,26 @@
     <string name="pop_chat">发起聊天</string>
     <string name="pop_group">创建群组</string>
     <string name="pop_add">添加好友</string>
+    <string name="nickname">昵称</string>
+    <string name="username">用户名</string>
+    <string name="occupation">职业</string>
+    <string name="telephone">电话</string>
+    <string name="call">打电话</string>
+    <string name="send_sms">发短信</string>
+    <string name="send_meaage">发信息</string>
+    <string name="email">邮箱</string>
+    <string name="send_email">发邮件</string>
+
+    <string name="select_contacts">选择联系人</string>
+    <string name="confirm">确认</string>
+    <string name="no_network">网络连接不可用</string>
+    <string name="create_group">创建群组</string>
+
 
     <string name="error_no_sdcard">没有SD卡，无法存储录音数据</string>
     <string name="error_state_record">正在录音中，请先停止录音</string>
     <string name="error_unknown">无法识别的错误</string>
+    <string name="no_data">没有相关数据！</string>
 
     <string-array name="language_entries">
         <item>普通话</item>

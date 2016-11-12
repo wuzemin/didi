@@ -29,6 +29,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.rong.message.LocationMessage;
 
+/**
+ * 信息分享定位
+ */
 public class AMAPLocationActivity extends BaseActivity implements View.OnClickListener, OnLocationGetListener {
 
     @BindView(R.id.map)
